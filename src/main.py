@@ -9,6 +9,7 @@ TIMEZONE_BUDAPEST = pytz.timezone("Europe/Budapest")
 CURRENT_TIMEZONE = TIMEZONE_BUDAPEST
 WORKING_HOURS_START = dt.time(9)
 WORKING_HOURS_END = dt.time(17)
+WEEKEND_DAY_INDICES = [5, 6]
 ZERO_DURATION = dt.timedelta(seconds=0)
 
 
@@ -37,7 +38,7 @@ def validate_submission_date(submission_date: dt.datetime, current_timezone=CURR
 
 def _validate_working_day(submission_date: dt.datetime, current_timezone):
     # TODO: add timezone
-    if submission_date.weekday() in [5, 6]:  # Monday is index 0
+    if submission_date.weekday() in WEEKEND_DAY_INDICES:
         raise exceptions.NotWorkingDay(f"Submission date <{submission_date}> is not a working day")
 
 
@@ -68,7 +69,7 @@ def get_resolution_date(
 
 def _get_next_work_day_start(initial_date, original_timezone):
     next_work_day = initial_date + dt.timedelta(days=1)
-    if next_work_day.weekday() in [5, 6]:
+    if next_work_day.weekday() in WEEKEND_DAY_INDICES:
         next_work_day += dt.timedelta(days=7 - next_work_day.weekday())
 
     next_work_day_start = next_work_day.replace(hour=WORKING_HOURS_START.hour, minute=WORKING_HOURS_START.minute)
