@@ -48,9 +48,7 @@ def _validate_working_hours(submission_date: dt.datetime, current_timezone):
         raise exceptions.NotWorkingHours(f"Submission date <{submission_date}> falls outside of working hours.")
 
 
-def get_resolution_date(
-    submission_date: dt.datetime, turnaround_time_in_hours: dt.timedelta, current_timezone=CURRENT_TIMEZONE
-):
+def get_resolution_date(submission_date: dt.datetime, turnaround_time_in_hours, current_timezone=CURRENT_TIMEZONE):
     original_timezone = submission_date.tzinfo
     resolution_date = submission_date.astimezone(current_timezone)
     remaining_time = dt.timedelta(hours=turnaround_time_in_hours)
