@@ -49,7 +49,8 @@ def _validate_working_hours(submission_date: dt.datetime, current_timezone):
 def get_resolution_date(
     submission_date: dt.datetime, turnaround_time_in_hours: dt.timedelta, current_timezone=CURRENT_TIMEZONE
 ):
-    resolution_date = submission_date
+    original_timezone = submission_date.tzinfo
+    resolution_date = submission_date.astimezone(current_timezone)
     remaining_time = dt.timedelta(hours=turnaround_time_in_hours)
 
     while remaining_time > ZERO_DURATION:
@@ -60,18 +61,18 @@ def get_resolution_date(
         remaining_time -= usable_remaining_time
 
         if is_end_of_working_hours(resolution_date):
-            resolution_date = _get_next_work_day_start(resolution_date)
+            resolution_date = _get_next_work_day_start(resolution_date, original_timezone)
 
     return resolution_date
 
 
-def _get_next_work_day_start(initial_date):
+def _get_next_work_day_start(initial_date, original_timezone):
     next_work_day = initial_date + dt.timedelta(days=1)
     if next_work_day.weekday() in [5, 6]:
         next_work_day += dt.timedelta(days=7 - next_work_day.weekday())
 
     next_work_day_start = next_work_day.replace(hour=WORKING_HOURS_START.hour, minute=WORKING_HOURS_START.minute)
-    return next_work_day_start
+    return next_work_day_start.replace(tzinfo=original_timezone)
 
 
 def is_end_of_working_hours(datetime):
