@@ -50,6 +50,36 @@ def test_validate_submission_date(submission_date, current_timezone, expected_va
             dt.timedelta(hours=1),
             CURRENT_TIMEZONE.localize(dt.datetime(2020, 6, 15, 13)),
         ),
+        (
+            CURRENT_TIMEZONE.localize(dt.datetime(2020, 6, 15, 12)),
+            dt.timedelta(hours=2),
+            CURRENT_TIMEZONE.localize(dt.datetime(2020, 6, 15, 14)),
+        ),
+        (
+            CURRENT_TIMEZONE.localize(dt.datetime(2020, 6, 15, 16)),
+            dt.timedelta(hours=1),
+            CURRENT_TIMEZONE.localize(dt.datetime(2020, 6, 16, 9)),
+        ),
+        (
+            CURRENT_TIMEZONE.localize(dt.datetime(2020, 6, 15, 16)),
+            dt.timedelta(hours=2),
+            CURRENT_TIMEZONE.localize(dt.datetime(2020, 6, 16, 10)),
+        ),
+        (
+            CURRENT_TIMEZONE.localize(dt.datetime(2020, 6, 15, 16)),
+            dt.timedelta(hours=9),
+            CURRENT_TIMEZONE.localize(dt.datetime(2020, 6, 17, 9)),
+        ),
+        (
+            CURRENT_TIMEZONE.localize(dt.datetime(2020, 6, 19, 16)),
+            dt.timedelta(hours=1),
+            CURRENT_TIMEZONE.localize(dt.datetime(2020, 6, 22, 9)),
+        ),
+        (
+            CURRENT_TIMEZONE.localize(dt.datetime(2020, 6, 19, 16)),
+            dt.timedelta(hours=1),
+            CURRENT_TIMEZONE.localize(dt.datetime(2020, 6, 22, 9)),
+        ),
     ],
 )
 def test_getting_resolution_date(submission_date, turnaround_time, expected_resolution_date):
