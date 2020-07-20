@@ -3,7 +3,7 @@ import datetime as dt
 import pytest
 import pytz
 
-from .main import CURRENT_TIMEZONE, validate_submission_date, get_resolution_date
+from .main import CURRENT_TIMEZONE, _validate_submission_date, _get_resolution_date
 
 
 UTC = pytz.utc
@@ -41,7 +41,7 @@ def test_earlier_timezone():
 def test_validate_submission_date(
     submission_date, current_timezone, expected_validity, expected_partial_error_message
 ):
-    is_valid, reason = validate_submission_date(submission_date, current_timezone)
+    is_valid, reason = _validate_submission_date(submission_date, current_timezone)
 
     if expected_partial_error_message is not None:
         assert expected_partial_error_message in reason
@@ -124,4 +124,6 @@ def test_validate_submission_date(
 def test_getting_resolution_date(
     submission_date, turnaround_time_in_hours, expected_resolution_date, current_timezone
 ):
-    assert get_resolution_date(submission_date, turnaround_time_in_hours, current_timezone) == expected_resolution_date
+    assert (
+        _get_resolution_date(submission_date, turnaround_time_in_hours, current_timezone) == expected_resolution_date
+    )
