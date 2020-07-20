@@ -42,8 +42,15 @@ def test_validate_submission_date(submission_date, current_timezone, expected_va
     assert is_valid is expected_validity, reason
 
 
-@pytest.mark.parametrize('submission_date, turnaround_time, expected_resolution_date', [
-    CURRENT_TIMEZONE.localize(2020, 6, 15, 12), dt.timedelta(hours=1), CURRENT_TIMEZONE.localize(2020, 6, 15, 13)
-])
+@pytest.mark.parametrize(
+    "submission_date, turnaround_time, expected_resolution_date",
+    [
+        (
+            CURRENT_TIMEZONE.localize(dt.datetime(2020, 6, 15, 12)),
+            dt.timedelta(hours=1),
+            CURRENT_TIMEZONE.localize(dt.datetime(2020, 6, 15, 13)),
+        ),
+    ],
+)
 def test_getting_resolution_date(submission_date, turnaround_time, expected_resolution_date):
     assert get_resolution_date(submission_date, turnaround_time) == expected_resolution_date
