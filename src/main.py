@@ -12,12 +12,12 @@ WORKING_HOURS_END = dt.time(17)
 ZERO_DURATION = dt.timedelta(seconds=0)
 
 
-def main(submission_date, turnaround_time):
+def main(submission_date, turnaround_time_in_hours):
     is_submission_date_valid, reason = validate_submission_date(submission_date)
     if not is_submission_date_valid:
         return reason
 
-    resolution_date = get_resolution_date(submission_date, turnaround_time)
+    resolution_date = get_resolution_date(submission_date, turnaround_time_in_hours)
     return resolution_date
 
 
@@ -47,10 +47,10 @@ def _validate_working_hours(submission_date: dt.datetime, current_timezone):
 
 
 def get_resolution_date(
-    submission_date: dt.datetime, turnaround_time: dt.timedelta, current_timezone=CURRENT_TIMEZONE
+    submission_date: dt.datetime, turnaround_time_in_hours: dt.timedelta, current_timezone=CURRENT_TIMEZONE
 ):
     resolution_date = submission_date
-    remaining_time = turnaround_time
+    remaining_time = dt.timedelta(hours=turnaround_time_in_hours)
 
     while remaining_time > ZERO_DURATION:
         end_of_working_day = resolution_date.replace(hour=WORKING_HOURS_END.hour, minute=WORKING_HOURS_END.minute)
