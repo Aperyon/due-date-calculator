@@ -72,7 +72,8 @@ def _get_next_work_day_start(initial_date, original_timezone):
         next_work_day += dt.timedelta(days=7 - next_work_day.weekday())
 
     next_work_day_start = next_work_day.replace(hour=WORKING_HOURS_START.hour, minute=WORKING_HOURS_START.minute)
-    return next_work_day_start.replace(tzinfo=original_timezone)
+    next_work_day_start = next_work_day_start.replace(tzinfo=original_timezone)
+    return next_work_day_start
 
 
 def is_end_of_working_hours(datetime):
