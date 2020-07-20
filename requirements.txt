@@ -1,0 +1,5 @@
+# This is only for easier installation
+pytz==2020.1
+pytest==5.4.3
+flake8==3.8.3
+black==19.10b0
