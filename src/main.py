@@ -44,3 +44,6 @@ def _validate_working_hours(submission_date: dt.datetime, current_timezone):
     if not (WORKING_HOURS_START <= submission_date.astimezone(current_timezone).time() < WORKING_HOURS_END):
         raise exceptions.NotWorkingHours(f'Submission date <{submission_date}> falls outside of working hours')
 
+
+def get_resolution_date(submission_date: dt.datetime, current_timezone=CURRENT_TIMEZONE):
+    pass

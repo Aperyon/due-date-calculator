@@ -3,7 +3,7 @@ import datetime as dt
 import pytest
 import pytz
 
-from .main import CURRENT_TIMEZONE, validate_submission_date
+from .main import CURRENT_TIMEZONE, validate_submission_date, get_resolution_date
 
 
 UTC = pytz.utc
@@ -37,3 +37,10 @@ def test_earlier_timezone():
 def test_validate_submission_date(submission_date, current_timezone, expected_validity):
     is_valid, reason = validate_submission_date(submission_date, current_timezone)
     assert is_valid is expected_validity, reason
+
+
+@pytest.mark.parametrize('submission_date, turnaround_time, expected_resolution_date', [
+    CURRENT_TIMEZONE.localize(2020, 6, 15, 12), dt.timedelta(hours=1), CURRENT_TIMEZONE.localize(2020, 6, 15, 13)
+])
+def test_getting_resolution_date(submission_date, turnaround_time, expected_resolution_date):
+    assert get_resolution_date(submission_date, turnaround_time) == expected_resolution_date
