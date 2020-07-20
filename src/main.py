@@ -51,29 +51,28 @@ def get_resolution_date(
 ):
     resolution_date = submission_date
     remaining_time = turnaround_time
-    while True:
-        if resolution_date.weekday() in [5, 6]:
-            resolution_date += dt.timedelta(days=7 - resolution_date.weekday())
+
+    while remaining_time > ZERO_DURATION:
         end_of_working_day = resolution_date.replace(hour=WORKING_HOURS_END.hour, minute=WORKING_HOURS_END.minute)
         time_until_end_of_working_hours = end_of_working_day - resolution_date
         usable_remaining_time = min(remaining_time, time_until_end_of_working_hours)
         resolution_date += usable_remaining_time
         remaining_time -= usable_remaining_time
 
-        if remaining_time > ZERO_DURATION:
-            resolution_date += dt.timedelta(days=1)
-            resolution_date = resolution_date.replace(hour=WORKING_HOURS_START.hour, minute=WORKING_HOURS_START.minute)
-            if resolution_date.weekday() in [5, 6]:
-                resolution_date += dt.timedelta(days=7 - resolution_date.weekday())
-        else:
-            if resolution_date.hour == WORKING_HOURS_END.hour and resolution_date.minute == WORKING_HOURS_END.minute:
-                resolution_date += dt.timedelta(days=1)
-                resolution_date = resolution_date.replace(
-                    hour=WORKING_HOURS_START.hour, minute=WORKING_HOURS_START.minute
-                )
-            if resolution_date.weekday() in [5, 6]:
-                resolution_date += dt.timedelta(days=7 - resolution_date.weekday())
-            break
+        if is_end_of_working_hours(resolution_date):
+            resolution_date = _get_next_work_day_start(resolution_date)
 
-    print("Final res date", resolution_date)
     return resolution_date
+
+
+def _get_next_work_day_start(initial_date):
+    next_work_day = initial_date + dt.timedelta(days=1)
+    if next_work_day.weekday() in [5, 6]:
+        next_work_day += dt.timedelta(days=7 - next_work_day.weekday())
+
+    next_work_day_start = next_work_day.replace(hour=WORKING_HOURS_START.hour, minute=WORKING_HOURS_START.minute)
+    return next_work_day_start
+
+
+def is_end_of_working_hours(datetime):
+    return datetime.hour == WORKING_HOURS_END.hour and datetime.minute == WORKING_HOURS_END.minute
