@@ -8,7 +8,7 @@ from . import exceptions
 TIMEZONE_BUDAPEST = pytz.timezone("Europe/Budapest")
 CURRENT_TIMEZONE = TIMEZONE_BUDAPEST
 
-# Working hours are always meant in `CURRENT_TIMEZONE`
+# Working hours are always meant in current timezone
 WORKING_HOURS_START = dt.time(9)
 WORKING_HOURS_END = dt.time(17)
 WEEKEND_DAY_INDICES = [5, 6]
