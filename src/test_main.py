@@ -14,7 +14,7 @@ def test_earlier_timezone():
     assert UTC.localize(now) > CURRENT_TIMEZONE.localize(now)
 
 
-@pytest.mark.parametrize('submission_date, current_timezone, is_valid', [
+@pytest.mark.parametrize('submission_date, current_timezone, expected_validity', [
     (dt.datetime(2020, 1, 1, 12, tzinfo=CURRENT_TIMEZONE), CURRENT_TIMEZONE, True),  # Wednesday
     (dt.datetime(2020, 1, 1, 9, tzinfo=CURRENT_TIMEZONE), CURRENT_TIMEZONE, True),
     (dt.datetime(2020, 1, 1, 9, tzinfo=CURRENT_TIMEZONE), UTC, False),
@@ -34,5 +34,6 @@ def test_earlier_timezone():
     (dt.datetime(2020, 6, 15, 10, tzinfo=CURRENT_TIMEZONE), UTC, False),
     (dt.datetime(2020, 6, 15, 11, tzinfo=CURRENT_TIMEZONE), UTC, True),
 ])
-def test_validate_submission_date(submission_date, current_timezone, is_valid):
-    assert validate_submission_date(submission_date, current_timezone) is is_valid
+def test_validate_submission_date(submission_date, current_timezone, expected_validity):
+    is_valid, reason = validate_submission_date(submission_date, current_timezone)
+    assert is_valid is expected_validity
