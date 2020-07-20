@@ -35,6 +35,12 @@ def test_earlier_timezone():
         (CURRENT_TIMEZONE.localize(dt.datetime(2020, 6, 15, 10)), CURRENT_TIMEZONE, True, None),
         (CURRENT_TIMEZONE.localize(dt.datetime(2020, 6, 15, 10)), UTC, False, "working hours"),
         (CURRENT_TIMEZONE.localize(dt.datetime(2020, 6, 15, 11)), UTC, True, None),
+        (
+            pytz.timezone("America/Whitehorse").localize(dt.datetime(2020, 1, 3, 16)),
+            UTC,
+            False,
+            "working day",
+        ),  # UTC-9
     ],
 )
 def test_validate_submission_date(

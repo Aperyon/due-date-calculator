@@ -39,8 +39,7 @@ def validate_submission_date(submission_date: dt.datetime, current_timezone=CURR
 
 
 def _validate_working_day(submission_date: dt.datetime, current_timezone):
-    # TODO: add timezone
-    if submission_date.weekday() in WEEKEND_DAY_INDICES:
+    if submission_date.astimezone(current_timezone).weekday() in WEEKEND_DAY_INDICES:
         raise exceptions.NotWorkingDay(f"Submission date <{submission_date}> is not a working day.")
 
 
