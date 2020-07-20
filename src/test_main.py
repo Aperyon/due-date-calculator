@@ -3,7 +3,7 @@ import datetime as dt
 import pytest
 import pytz
 
-from .main import CURRENT_TIMEZONE, _validate_submission_date, _get_resolution_date
+from .main import CURRENT_TIMEZONE, _validate_submission_date, _get_resolution_date, get_resolution_date
 
 
 UTC = pytz.utc
@@ -12,6 +12,30 @@ UTC = pytz.utc
 def test_earlier_timezone():
     now = dt.datetime.now()
     assert UTC.localize(now) > CURRENT_TIMEZONE.localize(now)
+
+
+class TestGettingResolutionDate:
+    def test_submit_out_of_working_hours(self):
+        submission_date = CURRENT_TIMEZONE.localize(dt.datetime(2020, 1, 1, 18))
+        turnaround_time_in_hours = 2
+        ok, value = get_resolution_date(submission_date, turnaround_time_in_hours)
+        assert ok is False
+        assert "working hours" in value
+
+    def test_submit_out_of_work_day(self):
+        submission_date = CURRENT_TIMEZONE.localize(dt.datetime(2020, 1, 4, 12))
+        turnaround_time_in_hours = 2
+        ok, value = get_resolution_date(submission_date, turnaround_time_in_hours)
+        assert ok is False
+        assert "work day" in value
+
+    def test_correct_submission_date(self):
+        submission_date = CURRENT_TIMEZONE.localize(dt.datetime(2020, 1, 1, 12))
+        turnaround_time_in_hours = 2
+        expected_date = CURRENT_TIMEZONE.localize(dt.datetime(2020, 1, 1, 14))
+        ok, value = get_resolution_date(submission_date, turnaround_time_in_hours)
+        assert ok is True
+        assert value == expected_date
 
 
 @pytest.mark.parametrize(
