@@ -15,13 +15,13 @@ WEEKEND_DAY_INDICES = [5, 6]
 ZERO_DURATION = dt.timedelta(seconds=0)
 
 
-def main(submission_date, turnaround_time_in_hours):
+def get_resolution_date(submission_date, turnaround_time_in_hours):
     is_submission_date_valid, reason = _validate_submission_date(submission_date)
     if not is_submission_date_valid:
-        return reason
+        return False, reason
 
     resolution_date = _get_resolution_date(submission_date, turnaround_time_in_hours)
-    return resolution_date
+    return True, resolution_date
 
 
 def _validate_submission_date(submission_date: dt.datetime, current_timezone=CURRENT_TIMEZONE):
