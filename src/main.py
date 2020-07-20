@@ -38,9 +38,9 @@ def validate_submission_date(submission_date: dt.datetime, current_timezone=CURR
     return True, None
 
 
-def _validate_working_day(submission_date: dt.datetime, current_timezone):
+def _validate_work_day(submission_date: dt.datetime, current_timezone):
     if submission_date.astimezone(current_timezone).weekday() in WEEKEND_DAY_INDICES:
-        raise exceptions.NotWorkingDay(f"Submission date <{submission_date}> is not a working day.")
+        raise exceptions.NotWorkDay(f"Submission date <{submission_date}> is not a work day.")
 
 
 def _validate_working_hours(submission_date: dt.datetime, current_timezone):
@@ -54,8 +54,8 @@ def get_resolution_date(submission_date: dt.datetime, turnaround_time_in_hours, 
     remaining_time = dt.timedelta(hours=turnaround_time_in_hours)
 
     while remaining_time > ZERO_DURATION:
-        end_of_working_day = resolution_date.replace(hour=WORKING_HOURS_END.hour, minute=WORKING_HOURS_END.minute)
-        time_until_end_of_working_hours = end_of_working_day - resolution_date
+        end_of_next_work_day = resolution_date.replace(hour=WORKING_HOURS_END.hour, minute=WORKING_HOURS_END.minute)
+        time_until_end_of_working_hours = end_of_next_work_day - resolution_date
         usable_remaining_time = min(remaining_time, time_until_end_of_working_hours)
         resolution_date += usable_remaining_time
         remaining_time -= usable_remaining_time

@@ -2,7 +2,7 @@ class InvalidDate(Exception):
     pass
 
 
-class NotWorkingDay(InvalidDate):
+class NotWorkDay(InvalidDate):
     pass
 
 

@@ -27,20 +27,15 @@ def test_earlier_timezone():
         (CURRENT_TIMEZONE.localize(dt.datetime(2020, 1, 1, 16, 59)), CURRENT_TIMEZONE, True, None),
         (CURRENT_TIMEZONE.localize(dt.datetime(2020, 1, 2, 12)), CURRENT_TIMEZONE, True, None),  # Thursday
         (CURRENT_TIMEZONE.localize(dt.datetime(2020, 1, 3, 12)), CURRENT_TIMEZONE, True, None),  # Friday
-        (CURRENT_TIMEZONE.localize(dt.datetime(2020, 1, 4, 12)), CURRENT_TIMEZONE, False, "working day"),  # Saturday
-        (CURRENT_TIMEZONE.localize(dt.datetime(2020, 1, 5, 12)), CURRENT_TIMEZONE, False, "working day"),  # Sunday
+        (CURRENT_TIMEZONE.localize(dt.datetime(2020, 1, 4, 12)), CURRENT_TIMEZONE, False, "work day"),  # Saturday
+        (CURRENT_TIMEZONE.localize(dt.datetime(2020, 1, 5, 12)), CURRENT_TIMEZONE, False, "work day"),  # Sunday
         (CURRENT_TIMEZONE.localize(dt.datetime(2020, 1, 6, 12)), CURRENT_TIMEZONE, True, None),  # Monday
         (CURRENT_TIMEZONE.localize(dt.datetime(2020, 1, 7, 12)), CURRENT_TIMEZONE, True, None),  # Tuesday
         (CURRENT_TIMEZONE.localize(dt.datetime(2020, 6, 15, 9)), CURRENT_TIMEZONE, True, None),  # DST
         (CURRENT_TIMEZONE.localize(dt.datetime(2020, 6, 15, 10)), CURRENT_TIMEZONE, True, None),
         (CURRENT_TIMEZONE.localize(dt.datetime(2020, 6, 15, 10)), UTC, False, "working hours"),
         (CURRENT_TIMEZONE.localize(dt.datetime(2020, 6, 15, 11)), UTC, True, None),
-        (
-            pytz.timezone("America/Whitehorse").localize(dt.datetime(2020, 1, 3, 16)),
-            UTC,
-            False,
-            "working day",
-        ),  # UTC-9
+        (pytz.timezone("America/Whitehorse").localize(dt.datetime(2020, 1, 3, 16)), UTC, False, "work day",),  # UTC-9
     ],
 )
 def test_validate_submission_date(
