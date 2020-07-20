@@ -103,7 +103,19 @@ def test_validate_submission_date(
         (
             CURRENT_TIMEZONE.localize(dt.datetime(2020, 6, 19, 17)),
             2,
-            CURRENT_TIMEZONE.localize(dt.datetime(2020, 6, 22, 9)),
+            CURRENT_TIMEZONE.localize(dt.datetime(2020, 6, 22, 11)),
+            UTC,
+        ),
+        (
+            CURRENT_TIMEZONE.localize(dt.datetime(2020, 6, 19, 17)),
+            9,
+            CURRENT_TIMEZONE.localize(dt.datetime(2020, 6, 22, 18)),
+            UTC,
+        ),
+        (
+            CURRENT_TIMEZONE.localize(dt.datetime(2020, 6, 19, 17)),
+            17,
+            CURRENT_TIMEZONE.localize(dt.datetime(2020, 6, 23, 18)),
             UTC,
         ),
     ],

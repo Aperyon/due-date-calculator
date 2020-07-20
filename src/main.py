@@ -7,6 +7,8 @@ from . import exceptions
 
 TIMEZONE_BUDAPEST = pytz.timezone("Europe/Budapest")
 CURRENT_TIMEZONE = TIMEZONE_BUDAPEST
+
+# Working hours are always meant in `CURRENT_TIMEZONE`
 WORKING_HOURS_START = dt.time(9)
 WORKING_HOURS_END = dt.time(17)
 WEEKEND_DAY_INDICES = [5, 6]
@@ -61,9 +63,10 @@ def get_resolution_date(
         resolution_date += usable_remaining_time
         remaining_time -= usable_remaining_time
 
-        if is_end_of_working_hours(resolution_date):
+        if _is_end_of_working_hours(resolution_date):
             resolution_date = _get_next_work_day_start(resolution_date, original_timezone)
 
+    resolution_date = resolution_date.astimezone(original_timezone)
     return resolution_date
 
 
@@ -73,9 +76,9 @@ def _get_next_work_day_start(initial_date, original_timezone):
         next_work_day += dt.timedelta(days=7 - next_work_day.weekday())
 
     next_work_day_start = next_work_day.replace(hour=WORKING_HOURS_START.hour, minute=WORKING_HOURS_START.minute)
-    next_work_day_start = next_work_day_start.replace(tzinfo=original_timezone)
     return next_work_day_start
 
 
-def is_end_of_working_hours(datetime):
+def _is_end_of_working_hours(datetime):
+    # `datetime` should be in correct timezone already
     return datetime.hour == WORKING_HOURS_END.hour and datetime.minute == WORKING_HOURS_END.minute
