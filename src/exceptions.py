@@ -1,4 +1,3 @@
-# TODO: proper error messages
 class InvalidDate(Exception):
     pass
 
